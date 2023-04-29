@@ -13,6 +13,7 @@ Some easy to make / easy to use tools for chatting with files. For most of them,
 6. 'qa_load_pinecone.ipynb' is an iPython notebook for Q&A with vectors preloaded to Pinecone. It does not load/ingest any file, but another app has done the ingestion/etc. and stored the vectors in a Pinecone index with an index_name. Then this file loads the Pinecone index (API key required), use Langchain's load_qa_chain and OpenAI (API key required) as LLM, and performs the Q&A.
 7. 'docs_converseretrieve_pinecone.ipynb' is an iPython notebook for multiple Word document. It uses the Word file loader, the text splitter and  conversational retrieval chain from Langchain which enables chat history, vector store from Pinecone (API key required), and LLM from OpenAI (API key required). 
 
+
 ## Notes
 The coding is straightforward, and can be readily modified for other purposes and to use other tools. For example, 'pdf_retrieve_qa.ipynb' and 'doc_retrieve_qa.ipynb' differ only by the loader, and you can change the loader to load other types of files. The text splitter, the retriever, vector store, and the chat model, can all be easily changed.
 
