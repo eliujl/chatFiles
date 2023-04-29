@@ -23,6 +23,8 @@ While developing projects related to chatting with files using AI tools (e.g., O
 - gpt4, pdf, js (detailed)
   - https://github.com/mayooear/gpt4-pdf-chatbot-langchain
   - https://www.youtube.com/watch?v=ih9PBGVVOO4
+- Pinecone, pdf, gpt3.5, python
+  - https://github.com/Haste171/langchain-chatbot
 
 ## Other Resources
 - No code: drop PDF and chat: https://www.chatpdf.com/
