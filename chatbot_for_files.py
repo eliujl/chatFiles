@@ -20,7 +20,7 @@ embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 # Use Open AI LLM with gpt-3.5-turbo.
 # Set the temperature to be 0 if you do not want it to make up things
-llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo",
+llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo", streaming=True,
                  openai_api_key=OPENAI_API_KEY)
 
 
@@ -30,18 +30,21 @@ PINECONE_API_ENV = os.environ['PINECONE_API_ENV']
 pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_API_ENV)
 
 # Get user input of whether to use Pinecone or not
-r = input('Do you want to use Pinecone index? (y/n): ')
+r = input(Fore.GREEN + 'Do you want to use Pinecone index? (y/n): ' + Style.RESET_ALL)
 if r.lower() == 'y' and PINECONE_API_KEY != '':
     pinecone_index_name = input(
         Fore.GREEN + "Enter your Pinecone index: " + Style.RESET_ALL)
     use_pinecone = True
 else:
-    print('Not using Pinecone or empty Pinecone API key provided. Using Chroma instead')
+    chroma_collection_name = input(
+        Fore.GREEN +
+        'Not using Pinecone or empty Pinecone API key provided. Using Chroma. Enter Chroma collection name: ' + Style.RESET_ALL)
     use_pinecone = False
     persist_directory = "./vectorstore"
 
 # Get user input of whether to ingest files or using existing vector store
-r = input('Do you want to ingest the file(s) in ./docs/? (y/n): ')
+r = input(Fore.GREEN +
+          'Do you want to ingest the file(s) in ./docs/? (y/n): ' + Style.RESET_ALL)
 if r.lower() == 'y':
 
     file_path = './docs/'
@@ -77,7 +80,7 @@ if r.lower() == 'y':
             [t.page_content for t in all_texts], embeddings, index_name=pinecone_index_name)  # add namespace=pinecone_namespace if provided
     else:
         docsearch = Chroma.from_documents(
-            all_texts, embeddings, collection_name="my_collection", persist_directory="./vectorstore")
+            all_texts, embeddings, collection_name=chroma_collection_name, persist_directory="./vectorstore")
 else:
     if use_pinecone:
         # Load the pre-created Pinecone index.
@@ -98,14 +101,15 @@ else:
 								name=index_name, dimension=1536, metric="cosine", shards=1)''')
     else:
         docsearch = Chroma(persist_directory=persist_directory, embedding_function=embeddings,
-                           collection_name="my_collection")
-        n_texts = docsearch._client._count(collection_name="my_collection")
+                           collection_name=chroma_collection_name)
+        n_texts = docsearch._client._count(
+            collection_name=chroma_collection_name)
 
 # print(len(docsearch))
 # Ask if the source document should be printed out.
 # If yes, the ouptput could be very long
 print_source = input(Fore.GREEN +
-                     "You want to also print texts from one most relevant source document? y/n: "
+                     "You want to also print texts from two most relevant source documents? y/n: "
                      + Style.RESET_ALL)
 
 # number of sources (split-documents when ingesting files); default is 4
@@ -113,7 +117,7 @@ k = min([20, n_texts])
 
 # Set up retriever
 retriever = docsearch.as_retriever(
-    search_type="similarity", search_kwargs={"k": k})
+    search_type="similarity", search_kwargs={"k": k}, include_metadata=True)
 
 # Set up ConversationalRetrievalChain
 CRqa = ConversationalRetrievalChain.from_llm(
@@ -140,12 +144,23 @@ def chatbot_loop():
         # Generate a reply based on the user input and chat history
         reply, source = get_response(query, chat_history)
         print(reply)
-        # Print the first (most relevant) source
+        # Print the two most relevant sources
         # (only the first 400 characters for brevity here) if needed
         if print_source.lower() == 'y':
-            print(Fore.GREEN + "Source document content:\n" +
-                  Style.RESET_ALL,
-                  source[0].page_content[:400])
+            for i, source_i in enumerate(source):
+                if i < 2:
+                    if len(source_i.page_content) > 400:
+                        page_content = source_i.page_content[:400]
+                    else:
+                        page_content = source_i.page_content
+                    if source_i.metadata:
+                        metadata_source = source_i.metadata['source']
+                        print(Fore.GREEN + "Source document info and content: " +
+                              Style.RESET_ALL, metadata_source, ": ", page_content)
+                        print(source_i.metadata)
+                    else:
+                        print(Fore.GREEN + "Source document content: " +
+                              Style.RESET_ALL, page_content)
 
         # Update the chat history with the user input and system response
         chat_history.append((query, reply))
