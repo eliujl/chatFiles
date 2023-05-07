@@ -3,7 +3,7 @@
 
 # Import required libraries
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import UnstructuredWordDocumentLoader, UnstructuredPDFLoader, UnstructuredFileLoader
+from langchain.document_loaders import UnstructuredWordDocumentLoader, PyMuPDFLoader, UnstructuredFileLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores import Pinecone, Chroma
@@ -63,7 +63,7 @@ if r.lower() == 'y':
             elif file.endswith('.txt'):
                 loader = UnstructuredFileLoader(file)
             elif file.endswith('.pdf'):
-                loader = UnstructuredPDFLoader(file)
+                loader = PyMuPDFLoader(file)
             else:
                 continue
             data = loader.load()
