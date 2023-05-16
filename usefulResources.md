@@ -25,7 +25,21 @@ While developing projects related to chatting with files using AI tools (e.g., O
   - https://www.youtube.com/watch?v=ih9PBGVVOO4
 - Pinecone, pdf, gpt3.5, python
   - https://github.com/Haste171/langchain-chatbot
+- Pinecone, pdf, gpt3.5, python, streamlit UI
+  - https://github.com/Haste171/langchain-chatbot/blob/main/streamlit.py
+- Pinecone/Chroma, pdf/docx/txt, gpt3.5, python, streamlit UI, with chat history
+  - https://github.com/eliujl/chatbot_for_files_UI
+- Pinecone/Chroma, pdf/docx/txt, gpt3.5, python, streamlit UI running on Huggingface, with chat history
+  - https://huggingface.co/spaces/Zenne/chatbot_for_files_langchain
+- Pinecone/Chroma, pdf/docx/txt, gpt3.5, python, streamlit UI running on Huggingface, with chat history and self-querying retriever
+  - https://huggingface.co/spaces/Zenne/chatbot_self_query
+- Youtube playlists
+  - James Briggs: https://youtube.com/playlist?list=PLIUOU7oqGTLieV9uTIFMm6_4PXg-hlN6F 
+  - Sam Witteveen: https://youtube.com/playlist?list=PL8motc6AQftk1Bs42EW45kwYbyJ4jOdiZ
+  - Data Independent: https://youtube.com/playlist?list=PLqZXAkvF1bPNQER9mLmDbntNfSpzdDIU5
+  - Sophia Yang: https://youtube.com/playlist?list=PL2KLV6jxFCI11C4bay8ktkbE9bfuk9oL- 
 
 ## Other Resources
 - No code: drop PDF and chat: https://www.chatpdf.com/
 - Pinecone Youtube tutorial: https://youtube.com/playlist?list=PLRLVhGQeJDTLiw-ZJpgUtZW-bseS2gq9-
+- Llama index: https://github.com/jerryjliu/llama_index
